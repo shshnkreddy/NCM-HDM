@@ -1,0 +1,1 @@
+srun python prompt_gpt_phishing.py 
