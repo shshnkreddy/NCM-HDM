@@ -11,12 +11,13 @@ from Prompting.prompt import *
 import re
 import os
 import time
+import fire 
 
 client = openai.OpenAI(api_key = OPEN_AI_KEY)
 model = 'gpt-3.5-turbo'  
 
 #Load the template
-file_path = 'incontext_template_IAG'
+file_path = 'incontext_template_IAG.txt'
 # Open the file in read mode
 with open(file_path, 'r') as file:
     # Read the entire content of the file and store it in a string variable
@@ -35,7 +36,7 @@ def save_lists(llm_outputs_mem, is_backups_mem, llm_justs, llm_unfiltered, promp
         "llm_unfiltered": llm_unfiltered,
         "prompts": prompts
     }
-    with open('IAG_data.json', 'w') as file:
+    with open(f'{model}_IAG_data.json', 'w') as file:
         json.dump(data, file, indent=4)
 
 def extract_justification_and_action(text):
@@ -93,8 +94,8 @@ def prompt_classification(history, current, back_up_response):
 def sim(x, y):
     return (1-np.abs(x-y)).sum()
 
-def main():
-    df = pd.read_csv('/common/home/users/s/shashankc/code/Phishing/IAG/2022-MURIBookChapter-FullData-IAG.csv')
+def main(file_path):
+    df = pd.read_csv(file_path)
     df = df[['TargetNum', 'Best_Location', 'Best_Payment', 'Best_Penalty', 'Best_Mprob', 'Warning', 'Covered', 'Outcome', 'Action', 'MturkID', 'Condition', 'Block', 'Trial']]
     df['id'] = df.apply(lambda x: x['MturkID'] + '_' + x['Condition'], axis=1)
     df = df.sort_values(by=['Block','Trial'])
@@ -161,7 +162,7 @@ def main():
     #Create test set
     df_test = df[(df['Block'] == 3) | (df['Block'] == 4)]
 
-    fpath = '/common/home/users/s/shashankc/code/Phishing/LLM_Prompting/IAG_data.json'
+    fpath = f'{model}_IAG_data.json'
     if(os.path.exists(fpath)):
         data = read_data_from_json(fpath)
         llm_outputs_mem = data["llm_outputs_mem"]
@@ -214,14 +215,14 @@ def main():
     df_test['llm_outputs_mem'] = llm_outputs_mem
     df_test['is_backups_mem'] = is_backups_mem
     df_test['justification'] = llm_justs
-    df_test.to_csv(f'{model}_iag.csv', index=False)
+    df_test.to_csv(f'{model}_IAG.csv', index=False)
 
     #Number of Backups
     print('Number of Backups:', df_test['is_backups_mem'].sum() / len(df_test))
         
 
 if __name__ == "__main__":
-    main()
+    fire.Fire(main)
 
 
 

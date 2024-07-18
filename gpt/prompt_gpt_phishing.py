@@ -13,11 +13,12 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
 from key import OPEN_AI_KEY
 import os
+import fire
 
 client = openai.OpenAI(api_key = OPEN_AI_KEY)
 model = 'gpt-3.5-turbo'  
 
-file_path = 'incontext_template.txt'
+file_path = 'incontext_template_phishing.txt'
 with open(file_path, 'r') as file:
     incontext_template = file.read()
 
@@ -85,7 +86,7 @@ def save_lists(llm_outputs_mem, is_backups_mem, llm_justs, llm_unfiltered, promp
         "llm_unfiltered": llm_unfiltered,
         "prompts": prompts
     }
-    with open(f'{model}.json', 'w') as file:
+    with open(f'{model}_phishing.json', 'w') as file:
         json.dump(data, file, indent=4)
 
 def read_data_from_json(file_path):
@@ -93,8 +94,8 @@ def read_data_from_json(file_path):
         data = json.load(file)
     return data
 
-def main():
-    df = pd.read_csv('embedded_emails.csv')
+def main(file_path):
+    df = pd.read_csv(file_path)
     df['current_embedding'] = df['current_embedding'].apply(lambda x: np.array(literal_eval(x.strip())))
     df['current'] = df['current'].apply(lambda x: x.strip('Email:\n'))
     df = df.sort_values(by=['phase','trial'])
@@ -147,7 +148,8 @@ def main():
 
     df_test = df[df['set']=='test']
 
-    fpath = f'/common/home/users/s/shashankc/code/Phishing/LLM_Prompting/{model}.json'
+    # load the results of gpt (if present)
+    fpath = f'./{model}_phishing.json'
     if(os.path.exists(fpath)):
         data = read_data_from_json(fpath)
         llm_outputs_mem = data["llm_outputs_mem"]
@@ -195,7 +197,7 @@ def main():
     df_test['llm_outputs_mem'] = llm_outputs_mem
     df_test['is_backups_mem'] = is_backups_mem
     df_test['justification'] = llm_justs
-    df_test.to_csv(f'{model}.csv', index=False)
+    df_test.to_csv(f'{model}_phishing.csv', index=False)
 
     #Number of Backups
     print('Memory:', df_test['is_backups_mem'].sum() / len(df_test))
@@ -222,6 +224,6 @@ def main():
     # plt.savefig(f'{model}.png')
 
 if __name__ == "__main__":
-    main()
+    fire.Fire(main)
 
 

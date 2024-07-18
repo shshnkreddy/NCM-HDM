@@ -29,8 +29,9 @@ The raw data is released by [DDMLab](https://www.cmu.edu/dietrich/sds/ddmlab/) a
 
 For preparing data for experiment of GPT 3.5-Turbo (Phishing Dataset only), run the following command: 
 ```
-bash gpt/run_generate_embeddings.sh
+python gpt/generate_embeddings.py --filepath=<path to phishing_response.json> --out_dir=<path to store the embedded dataset>
 ```
+
 ### IL-PIMM
 To train the IL-PIMM, run the following command:
 ```
@@ -48,8 +49,10 @@ Note: use `llm` conda environment.
 ### GPT 3.5-Turbo
 To generate results using the gpt3.5-turbo model, run the following command:
 ```
-bash gpt/run_prompt_gpt_{iag/phishing}.sh
+python gpt/python prompt_gpt_{iag/phishing}.py --file_path={path to embedded_dataset/IAG dataset}
 ```
+
+Note: Ensure that you insert your open-ai api key in the OPEN_AI_KEY field in 'gpt/key.py'.
 
 ### IBL
 We utilize the implementation of IBL for [phishing](https://github.com/DDM-Lab/PhishingTrainingTask) and [IAG](https://github.com/DDM-Lab/InsiderAttackGame) respectively. 

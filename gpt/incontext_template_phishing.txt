@@ -1,0 +1,33 @@
+Your objective is to anticipate the human's classification of the current email by leveraging their historical responses to similar emails. The cognitive model guiding this prediction asserts that the individual's reactions are exclusively shaped by their prior interactions with comparable email content. Additionally, ensure your decisions are substantiated by referencing the relevant historical emails and responses to provide a comprehensive justification for your predictions.
+
+## Example
+Consider the following example:
+
+### History Emails and Human Responses:
+Email 1:
+Subject: Unusual Login Activity Detected
+Body: [Content]
+Response: YES
+Sender: support@yourbankonline.com
+
+Email 2:
+Subject: Account Security Update Required
+Body: [Content]
+Response: YES
+Sender: noreply@shoppingwebsite.com
+
+Email 3:
+Subject: Exclusive Limited-Time Offer
+Body: [Content]
+Response: NO
+Sender: security@onlineinvestment.com
+
+### Current Email and Human Response:
+
+Subject: Immediate Attention Required - Possible Unauthorized Transaction
+Body: [Content]
+Justification: Similar to Email 1 from the history, where the sender was 'support@yourbankonline.com' with a subject about 'Account Security Update Required,' the current email exhibits comparable characteristics. The historical response pattern suggests that emails from addresses resembling official bank sources, coupled with urgent security concerns, were consistently labeled as phishing (YES) by the human.
+Response: YES
+
+## Email of interest
+Apply this rationale to predict the response for the current email.

@@ -9,7 +9,7 @@ def filter_history(text):
     cleaned_text = re.sub(r'## History Emails and Responses:.*?## Current Email:\n', 'Email:', text, flags=re.DOTALL)
     return cleaned_text
 
-def main(file_path):
+def main(file_path, out_dir='./'):
     model = SentenceTransformer('sentence-transformers/gtr-t5-xxl')
     # Initialize an empty list to store dictionaries
     data = []
@@ -39,8 +39,6 @@ def main(file_path):
             l = i
             r = min(i+batch_size, len(df))
             batch_text = texts[l:r]
-            # _embeddings = get_embedding_hf(llm, tokenizer, batch_text, layer='last').detach().cpu().numpy()
-            # _embeddings = np.random.rand((r-l, 768))
             _embeddings = model.encode(batch_text)
             embeddings.append(_embeddings)
             print(f'Step: {i/len(df)*100}')
@@ -50,6 +48,13 @@ def main(file_path):
     df['current_embedding'] = embeddings
 
     print(df.info())
+
+    import os
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+    outfile = open(f'{out_dir}/embedded_emails.csv', 'wb')
+    df.to_csv(outfile, index = False, header = True, sep = ',', encoding = 'utf-8')
+    outfile.close()
 
 if __name__ == '__main__':
     fire.Fire(main)

@@ -1,0 +1,59 @@
+Your goal is to predict the actions of a human in a certain task. The cognitive model guiding this prediction asserts that the individual's reactions are exclusively shaped by their previous actions in similar instances.
+ 
+[[Task Description]]
+You are an employee participating in a high-stakes corporate espionage operation, tasked with infiltrating computers to steal critical proprietary information while evading detection by security analysts. Each hacking attempt presents a calculated risk, with rewards for successful breaches and consequences for detection. Each attempt occurs in two stages, 1) target selection: decide which computer to attack, after this, you may receive a signal from the system stating whether it is being monitored. Note that this signal maybe a bluff, i.e, it may claim it is being monitored while it is not, and 2) attack/withdraw: decide whether to continue attacking the target. Feedback on the status of the attack is provided immediately.
+Below are the features of each instance and the action space of the human.
+ 
+# Features
+- TargetNum: An integer from 1 to 6, representing the ID number of the target computer.
+- Location: An integer from 1 to 6 (1 = top-middle, 2 = top-right, 3 = bottom-right, 4 = bottom-middle, 5 = bottom-left, 6 = top-left), representing the location ID of the selected target.
+- Payment: The reward if the attack is successful.
+- Penalty: The penalty if the attack is unsuccessful.
+- Mprob: The probability that the selected target is being monitored by security analysts.
+- Warning: A binary flag where 0 indicates no warning signal presented, and 1 indicates a warning signal was presented to the attacker.
+- Feedback: -10 to 10, The value of the reward/penalty given the attacker's action and target coverage. Penalty if the target covered else Payment, or 0 if withdrew attack.
+ 
+# Actions
+- Withdraw: 0
+- Attack: 1
+ 
+Based on past actions of the human in similar instance, your task is to predict the SECOND decision only (whether to attack/withdraw). Additionally, ensure your decisions are substantiated by referencing the relevant instances in the history to provide a comprehensive justification for your predictions.
+ 
+[[Example]]
+Consider the following example:
+
+[Input]
+## History attacks:
+# attack 1
+- Features (TargetNum, Location, Payment, Penalty, Mprob, Warning): (1, 2, 2, 1, 0.22, 0)
+- Action: 1
+- Feedback: 2
+# attack 2
+- Features (TargetNum, Location, Payment, Penalty, Mprob, Warning): (6, 1, 5, 5, 0.36, 0)
+- Action: 1
+- Feedback: 5
+# attack 3
+- Features (TargetNum, Location, Payment, Penalty, Mprob, Warning): (4, 3, 9, 10, 0.4, 0)
+- Action: 1
+- Feedback: 9
+
+## Current attack:
+- Features (TargetNum, Location, Payment, Penalty, Mprob, Warning): (4, 1, 8, 9, 0.37, 1)
+
+[Output]
+```json
+{
+    "justification": "The human chose to attack the same location in the past and target with similar Mprob, both leading to succesful outcomes. Hence, it is likely that the human will continue with this approach.",
+    "action": 1
+}
+```
+
+Predict the decision on the following instance: 
+[[Current instance]]
+
+
+<!-- [Input]
+{current_instance}
+
+[Output]
+```json -->
