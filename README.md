@@ -25,12 +25,14 @@ Please download the processed data from:
 - Phishing: [dropbox.com](https://www.dropbox.com/scl/fi/ten1liealdf2r33kzsyta/phishing.zip?rlkey=lc84xs11iiu9v23j4s4n9b5ev&dl=0)
 - IAG: [dropbox.com](https://www.dropbox.com/scl/fi/1yyeapx0hvanox28a1ddy/IDG.zip?rlkey=eehgs3jfj2maymsa62brsutag&dl=0)
 
-The raw data is released by [DDMLab](https://www.cmu.edu/dietrich/sds/ddmlab/) and can be accessed via https://osf.io/c7ntu/?view_only=0e6261b5e818440495d9917044611758 and https://osf.io/r83ag/. 
+The raw data is released by [DDMLab](https://www.cmu.edu/dietrich/sds/ddmlab/) and can be accessed via [https://osf.io/c7ntu/](https://osf.io/c7ntu/?view_only=0e6261b5e818440495d9917044611758) and https://osf.io/r83ag/. 
 
 For preparing data for experiment of GPT 3.5-Turbo (Phishing Dataset only), run the following command: 
 ```
 python gpt/generate_embeddings.py --filepath=<path to phishing_response.json> --out_dir=<path to store the embedded dataset>
 ```
+
+`phishing_response.json` can be found in Phishing dataset.
 
 ### IL-PIMM
 To train the IL-PIMM, run the following command:
@@ -38,13 +40,15 @@ To train the IL-PIMM, run the following command:
 bash il-pimm/run_train.sh
 ```
 
+Note: provide argument `root_dir` and `data_dir`. `root_dir` is the directory where you want to save the results; `data_dir` is the directory of your `phishing-Emd` folder (find it in Phishing dataset).
+
 ### TL-PIMM
 To train the TL-PIMM, run the following command:
 ```
 bash tl-pimm/run_train.sh
 ```
 
-Note: use `llm` conda environment.
+Note: use `llm` conda environment; provide `data_path` and `output_dir`, `data_path` is the path of the `train.json` file in `phishing-Text` folder. 
 
 ### GPT 3.5-Turbo
 To generate results using the gpt3.5-turbo model, run the following command:
@@ -52,7 +56,7 @@ To generate results using the gpt3.5-turbo model, run the following command:
 python gpt/python prompt_gpt_{iag/phishing}.py --file_path={path to embedded_dataset/IAG dataset}
 ```
 
-Note: Ensure that you insert your open-ai api key in the OPEN_AI_KEY field in 'gpt/key.py'.
+Note: esnsure that you insert your open-ai api key in the OPEN_AI_KEY field in 'gpt/key.py'.
 
 ### IBL
 We utilize the implementation of IBL for [phishing](https://github.com/DDM-Lab/PhishingTrainingTask) and [IAG](https://github.com/DDM-Lab/InsiderAttackGame) respectively. 
@@ -61,4 +65,4 @@ We utilize the implementation of IBL for [phishing](https://github.com/DDM-Lab/P
 
 Paper Link: 
 
-Contact: cychen.2020@phdcs.smu.edu.sg, shashankc@smu.edu.sg, mariajor@andrew.cmu.edu
+Contact: cychen.2020@phdcs.smu.edu.sg, shashankc@smu.edu.sg, ddmlab@andrew.cmu.edu
