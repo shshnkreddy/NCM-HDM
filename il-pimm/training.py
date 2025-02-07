@@ -104,9 +104,9 @@ def main(
     )
     trainer.fit(model, datamodule=dm)
 
-    # Test the model
-    dm.setup("test")
-    trainer.test(ckpt_path="best", datamodule=dm)
+    # Test the model (best chkpt is not stored, use eval.py for evaluation)
+    # dm.setup("test")
+    # trainer.test(ckpt_path="best", datamodule=dm)
 
 
 if __name__ == "__main__":
