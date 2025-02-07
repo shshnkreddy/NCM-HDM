@@ -39,6 +39,10 @@ To train the IL-PIMM, run the following command:
 ```
 bash il-pimm/run_train.sh
 ```
+To evaluate the IL-PIMM, run the following command:
+```
+python eval.py
+```
 
 Note: provide argument `root_dir` and `data_dir`. `root_dir` is the directory where you want to save the results; `data_dir` is the directory of your `phishing-Emd` folder (find it in Phishing dataset).
 

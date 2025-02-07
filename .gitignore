@@ -1,1 +1,4 @@
 __pycache__/
+il-pimm/run_train_local.sh
+.gitignore
+*.out
